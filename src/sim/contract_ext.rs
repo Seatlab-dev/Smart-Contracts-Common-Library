@@ -1,9 +1,6 @@
 use super::execution_ext::ExecutionExt;
 use crate::non_wasm::WithAccount;
-use near_sdk::{
-    serde::{Deserialize, Serialize},
-    AccountId, Balance, Gas,
-};
+use near_sdk::{serde::Deserialize, AccountId, Balance, Gas};
 use near_sdk_sim::{ExecutionResult, UserAccount, ViewResult};
 use std::marker::PhantomData;
 
