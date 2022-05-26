@@ -11,10 +11,16 @@ near-sdk-sim = {version = "4.0.0-pre.8", optional = true}
 near-units = "0.1.0"
 base64 = "0.13.0"
 regex = "1.5.5"
+url = "2.2.2"
 
 [dependencies.contract-version]
 git = "https://github.com/keyko-io/contract-version.git"
 rev = "068746f"
+
+[dependencies.serde_with]
+version = "1.11.0"
+default-features = false
+features = [ "macros" ]
 
 [features]
 default = []

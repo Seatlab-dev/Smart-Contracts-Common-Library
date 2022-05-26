@@ -1,10 +1,13 @@
 use super::execution_ext::ExecutionExt;
-use near_sdk::{AccountId, Balance, Gas};
+use crate::non_wasm::WithAccount;
+use near_sdk::{
+    serde::{Deserialize, Serialize},
+    AccountId, Balance, Gas,
+};
 use near_sdk_sim::{ExecutionResult, UserAccount, ViewResult};
 use std::marker::PhantomData;
 
-/// Exposes some functionality from
-/// [`near_sdk_sim::ContractAccount`].
+/// Exposes some functionality from [`near_sdk_sim::ContractAccount`].
 pub trait ContractAcc {
     type Contract;
     fn account_id(&self) -> near_sdk::AccountId;
@@ -23,10 +26,6 @@ impl<T> ContractAcc for near_sdk_sim::ContractAccount<T> {
     fn user_account(&self) -> &near_sdk_sim::UserAccount {
         &self.user_account
     }
-}
-
-pub trait WithAccount<LocalPin> {
-    fn with_account(account_id: AccountId) -> Self;
 }
 
 pub trait ContractExt: ContractAcc {
@@ -209,7 +208,7 @@ pub trait ContractExt: ContractAcc {
         Execution::new(res)
     }
 
-    fn debug_json_deploy<LocalPin>(
+    fn debug_json_deploy(
         root: &UserAccount,
         contract_id: &str,
         wasm_bytes: &[u8],
@@ -219,7 +218,7 @@ pub trait ContractExt: ContractAcc {
         deposit: u128,
     ) -> near_sdk_sim::ContractAccount<Self::Contract>
     where
-        Self::Contract: WithAccount<LocalPin>,
+        Self::Contract: WithAccount,
     {
         let method_name = method.to_string();
         let args_str = near_sdk::serde_json::to_string(&args).unwrap();
@@ -236,7 +235,7 @@ pub trait ContractExt: ContractAcc {
         Self::json_deploy(root, contract_id, wasm_bytes, method, args, gas, deposit)
     }
 
-    fn json_deploy<LocalPin>(
+    fn json_deploy(
         root: &UserAccount,
         contract_id: &str,
         wasm_bytes: &[u8],
@@ -247,7 +246,7 @@ pub trait ContractExt: ContractAcc {
         //
     ) -> near_sdk_sim::ContractAccount<Self::Contract>
     where
-        Self::Contract: WithAccount<LocalPin>,
+        Self::Contract: WithAccount,
     {
         let account_id = near_sdk::AccountId::new_unchecked(contract_id.to_string());
         let __contract = Self::Contract::with_account(account_id.clone());
@@ -361,6 +360,17 @@ pub trait ContractExt: ContractAcc {
 }
 
 impl<T> ContractExt for T where T: ContractAcc {}
+
+pub struct Arbitrary;
+
+impl<'de> Deserialize<'de> for Arbitrary {
+    fn deserialize<D>(_deserializer: D) -> Result<Self, D::Error>
+    where
+        D: near_sdk::serde::Deserializer<'de>,
+    {
+        panic!("Arbitrary should not be automatically deserialized. Use the inner ExecutionResult instead")
+    }
+}
 
 #[must_use]
 pub struct View<T> {
