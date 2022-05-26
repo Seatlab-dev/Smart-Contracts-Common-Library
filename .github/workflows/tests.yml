@@ -1,0 +1,69 @@
+name: Tests
+on:
+  push:
+    # branches:
+    #   - main
+    # tags:
+  pull_request:
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+jobs:
+
+# for the cargo actions, because the rust project may not be on the root of the 
+# repository, we use a marcopolo's fork of the actions-rs/cargo@v1 :
+# marcopolo/cargo@a527bf4d534717ff4424a84446c5d710f8833139
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # rust compiler for running tests
+      - uses: actions/checkout@v2
+      - name: Install latest stable (for linux-gnu)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          components: rustfmt, clippy
+          # override: true
+      # rust compiler for wasm tests
+      - name: Install latest stable (for wasm)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          components: rustfmt, clippy
+          # override: true
+      # caching (cargo registry)
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ubuntu-latest-stable-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+      # caching (cargo index)
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ubuntu-latest-stable-cargo-index-${{ hashFiles('**/Cargo.toml') }}
+      # triggers all build.rs steps
+      - name: Trigger build.rs steps
+        run: |
+          find . \
+            -maxdepth 1 \
+            -name build.rs  \
+            -prune \
+            -exec touch -c {} \;
+      # Run normal tests
+      - name: Normal Tests
+        uses: marcopolo/cargo@a527bf4d534717ff4424a84446c5d710f8833139
+        with:
+          command: test
+          args: --target=x86_64-unknown-linux-gnu
+      # Run wasm check
+      - name: Wasm Check
+        uses: marcopolo/cargo@a527bf4d534717ff4424a84446c5d710f8833139
+        with:
+          command: check
+          args: --target wasm32-unknown-unknown
+      
