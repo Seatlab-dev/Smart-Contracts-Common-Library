@@ -1,4 +1,5 @@
 pub mod collections;
+pub mod js_integer;
 pub mod owners;
 pub mod refund;
 pub mod wrapped_url;
@@ -11,6 +12,7 @@ pub mod sim;
 pub mod non_wasm;
 
 pub use contract_version as version;
+pub use js_integer::JsUint;
 pub use wrapped_url::Url;
 pub use wrapped_value::Value;
 
