@@ -432,10 +432,211 @@ where
     pub fn unwrap_json(&self) -> T {
         self.inner.unwrap_json()
     }
+
+    pub fn map<M>(self) -> Execution<M>
+    where
+        M: near_sdk::serde::de::DeserializeOwned,
+    {
+        Execution::<M>::new(self.inner)
+    }
 }
 
 impl Execution<()> {
     pub fn assert_success(&self) {
-        self.inner.assert_success()
+        use near_sdk_sim::transaction::ExecutionStatus;
+        match &self.inner.outcome().status {
+            ExecutionStatus::SuccessValue(bytes) => {
+                assert!(bytes.is_empty());
+            }
+            _ => {
+                panic!("expected a success of an empty result")
+            }
+        }
+    }
+}
+
+/// After having the inputs, allows calling it's related method.
+pub trait Call {
+    type Output;
+    fn call(
+        &self,
+        caller: &UserAccount,
+        gas: impl Into<Option<near_sdk::Gas>>,
+        deposit: impl Into<Option<near_sdk::Balance>>,
+    ) -> Execution<Self::Output>;
+}
+
+impl<'contract, Contract, Input> Call
+    for near_sdk::utils::InputWrapped<'contract, near_sdk_sim::ContractAccount<Contract>, Input>
+where
+    Input: near_sdk::utils::Method + near_sdk::serde::Serialize,
+    for<'de> <Input as near_sdk::Method>::Output: near_sdk::serde::Deserialize<'de>,
+{
+    type Output = Input::Output;
+    fn call(
+        &self,
+        caller: &UserAccount,
+        gas: impl Into<Option<near_sdk::Gas>>,
+        deposit: impl Into<Option<near_sdk::Balance>>,
+    ) -> Execution<Self::Output> {
+        self.inner.debug_json_call(
+            caller,
+            Input::NAME,
+            near_sdk::serde_json::to_value(&self.input).unwrap(),
+            gas.into()
+                .unwrap_or_else(|| near_sdk::Gas(near_sdk_sim::DEFAULT_GAS)),
+            deposit.into().unwrap_or_default(),
+        )
+    }
+}
+
+/// After having the inputs, allows calling it's related method.
+/// The output can be defined by the caller.
+pub trait AnyCall {
+    fn arbitrary_call(
+        &self,
+        caller: &UserAccount,
+        gas: impl Into<Option<near_sdk::Gas>>,
+        deposit: impl Into<Option<near_sdk::Balance>>,
+    ) -> Execution<Arbitrary> {
+        self.any_call(
+            caller,
+            gas.into()
+                .unwrap_or_else(|| near_sdk::Gas(near_sdk_sim::DEFAULT_GAS)),
+            deposit.into().unwrap_or_default(),
+        )
+    }
+    fn any_call<T>(
+        &self,
+        caller: &UserAccount,
+        gas: near_sdk::Gas,
+        deposit: near_sdk::Balance,
+    ) -> Execution<T>
+    where
+        T: for<'de> near_sdk::serde::Deserialize<'de>;
+}
+
+impl<'contract, Contract, Input> AnyCall
+    for near_sdk::utils::InputWrapped<'contract, near_sdk_sim::ContractAccount<Contract>, Input>
+where
+    Input: near_sdk::utils::Method + near_sdk::serde::Serialize,
+{
+    fn any_call<T>(
+        &self,
+        caller: &UserAccount,
+        gas: near_sdk::Gas,
+        deposit: near_sdk::Balance,
+    ) -> Execution<T>
+    where
+        T: for<'de> near_sdk::serde::Deserialize<'de>,
+    {
+        self.inner.debug_json_call(
+            caller,
+            Input::NAME,
+            near_sdk::serde_json::to_value(&self.input).unwrap(),
+            gas,
+            deposit,
+        )
+    }
+}
+
+/// After having the inputs, allows vew-calling it's related method.
+pub trait ViewCall {
+    type Output;
+    fn view(&self) -> View<Self::Output>;
+}
+
+impl<'contract, Contract, Input> ViewCall
+    for near_sdk::utils::InputWrapped<'contract, near_sdk_sim::ContractAccount<Contract>, Input>
+where
+    Input: near_sdk::utils::Method + near_sdk::serde::Serialize,
+    for<'de> <Input as near_sdk::Method>::Output: near_sdk::serde::Deserialize<'de>,
+{
+    type Output = Input::Output;
+    fn view(&self) -> View<Self::Output> {
+        self.inner.debug_json_view(
+            Input::NAME,
+            near_sdk::serde_json::to_value(&self.input).unwrap(),
+        )
+    }
+}
+
+/// After having the inputs, allows vew-calling it's related method.
+pub trait AnyViewCall {
+    fn arbitrary_view(&self) -> View<Arbitrary> {
+        self.any_view()
+    }
+    fn any_view<T>(&self) -> View<T>
+    where
+        T: for<'de> near_sdk::serde::Deserialize<'de>;
+}
+
+impl<'contract, Contract, Input> AnyViewCall
+    for near_sdk::utils::InputWrapped<'contract, near_sdk_sim::ContractAccount<Contract>, Input>
+where
+    Input: near_sdk::utils::Method + near_sdk::serde::Serialize,
+{
+    fn any_view<T>(&self) -> View<T>
+    where
+        T: for<'de> near_sdk::serde::Deserialize<'de>,
+    {
+        self.inner.debug_json_view(
+            Input::NAME,
+            near_sdk::serde_json::to_value(&self.input).unwrap(),
+        )
+    }
+}
+
+/// After having the inputs, allows deploying with it's related method.
+pub trait Deploy<Contract> {
+    fn deploy(
+        &self,
+        caller: &UserAccount,
+        contract_id: impl AsRef<str>,
+        wasm_bytes: &[u8],
+        gas: impl Into<Option<near_sdk::Gas>>,
+        deposit: impl Into<Option<near_sdk::Balance>>,
+    ) -> near_sdk_sim::ContractAccount<Contract>;
+}
+
+impl<'contract, Contract, Input> Deploy<Contract>
+    for near_sdk::utils::InputWrapped<
+        'contract,
+        std::marker::PhantomData<near_sdk_sim::ContractAccount<Contract>>,
+        Input,
+    >
+where
+    Input: near_sdk::utils::Method + near_sdk::serde::Serialize,
+    for<'de> <Input as near_sdk::Method>::Output: near_sdk::serde::Deserialize<'de>,
+    Contract: WithAccount,
+{
+    fn deploy(
+        &self,
+        caller: &UserAccount,
+        contract_id: impl AsRef<str>,
+        wasm_bytes: &[u8],
+        gas: impl Into<Option<near_sdk::Gas>>,
+        deposit: impl Into<Option<near_sdk::Balance>>,
+    ) -> near_sdk_sim::ContractAccount<Contract> {
+        near_sdk_sim::ContractAccount::<Contract>::debug_json_deploy(
+            caller,
+            contract_id.as_ref(),
+            wasm_bytes,
+            Input::NAME,
+            near_sdk::serde_json::to_value(&self.input).unwrap(),
+            gas.into()
+                .unwrap_or_else(|| near_sdk::Gas(near_sdk_sim::DEFAULT_GAS)),
+            deposit.into().unwrap_or_default(),
+        )
+    }
+}
+
+pub struct DummyContract {
+    pub account_id: AccountId,
+}
+
+impl WithAccount for DummyContract {
+    fn with_account(account_id: AccountId) -> Self {
+        Self { account_id }
     }
 }

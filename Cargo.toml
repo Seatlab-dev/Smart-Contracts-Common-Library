@@ -6,7 +6,7 @@ edition = "2021"
 resolver = "2"
 
 [dependencies]
-near-sdk = {version = "4.0.0-pre.8", features = ["unstable"]}
+near-sdk = {version = "=4.0.0-pre.8", features = ["unstable"]}
 near-sdk-sim = {version = "4.0.0-pre.8", optional = true}
 near-units = "0.1.0"
 base64 = "0.13.0"
@@ -21,6 +21,10 @@ rev = "068746f"
 version = "1.11.0"
 default-features = false
 features = [ "macros" ]
+
+[patch.crates-io.near-sdk]
+git = "ssh://git@github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git"
+rev = "556b6dd"
 
 [features]
 default = []

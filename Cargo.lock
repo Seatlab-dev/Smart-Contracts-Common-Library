@@ -1826,9 +1826,8 @@ dependencies = [
 
 [[package]]
 name = "near-sdk"
-version = "4.0.0-pre.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1e895ead9571fcbfcb283aa75612522f1fd6f62a50101e6c4c2950f3f2ddb4f"
+version = "4.0.0-pre.8"
+source = "git+ssh://git@github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=556b6dd#556b6ddcf78bc32d9a713ebcead3e0766660c977"
 dependencies = [
  "base64 0.13.0",
  "borsh 0.9.3",
@@ -1845,9 +1844,8 @@ dependencies = [
 
 [[package]]
 name = "near-sdk-macros"
-version = "4.0.0-pre.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86ed4b9e4f65e8bfb73b0db0bd35ba7e30ceb98e65c9ebb4a2ce41c312646d54"
+version = "4.0.0-pre.8"
+source = "git+ssh://git@github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=556b6dd#556b6ddcf78bc32d9a713ebcead3e0766660c977"
 dependencies = [
  "Inflector",
  "proc-macro2",
@@ -1857,9 +1855,9 @@ dependencies = [
 
 [[package]]
 name = "near-sdk-sim"
-version = "4.0.0-pre.9"
+version = "4.0.0-pre.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf29b57ff916f80cf76096247be55bd0ec18ba6855c09d997017221ea9b305c7"
+checksum = "9e654b760f92c7e6364e0284622676923ecba0ee04e75df25dcd7d905218a406"
 dependencies = [
  "funty",
  "lazy-static-include",
@@ -1896,9 +1894,8 @@ dependencies = [
 
 [[package]]
 name = "near-sys"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e307313276eaeced2ca95740b5639e1f3125b7c97f0a1151809d105f1aa8c6d3"
+version = "0.1.0"
+source = "git+ssh://git@github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=556b6dd#556b6ddcf78bc32d9a713ebcead3e0766660c977"
 
 [[package]]
 name = "near-units"
