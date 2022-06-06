@@ -59,7 +59,7 @@ jobs:
         uses: marcopolo/cargo@a527bf4d534717ff4424a84446c5d710f8833139
         with:
           command: test
-          args: --target=x86_64-unknown-linux-gnu
+          args: --features "sim" --target=x86_64-unknown-linux-gnu
       # Run wasm check
       - name: Wasm Check
         uses: marcopolo/cargo@a527bf4d534717ff4424a84446c5d710f8833139
