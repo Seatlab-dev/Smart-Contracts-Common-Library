@@ -1,5 +1,6 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
+    schemars::JsonSchema,
     serde::{Deserialize, Serialize},
     serde_json,
 };
@@ -7,9 +8,10 @@ use near_sdk::{
 /// Wrapper that implements borsh de/serialization for [`serde_json::Value`].
 ///
 /// For borsh, the structure is considered a `Vec<u8>`.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 #[serde(transparent)]
+#[schemars(crate = "near_sdk::schemars")]
 pub struct Value {
     inner: serde_json::Value,
 }

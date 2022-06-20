@@ -8,9 +8,6 @@ pub mod wrapped_value;
 #[cfg(feature = "sim")]
 pub mod sim;
 
-#[cfg(not(target_arch = "wasm32"))]
-pub mod non_wasm;
-
 pub use contract_version as version;
 pub use js_integer::JsUint;
 pub use wrapped_url::Url;

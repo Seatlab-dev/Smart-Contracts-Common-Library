@@ -1,5 +1,5 @@
 use super::execution_ext::ExecutionExt;
-use crate::non_wasm::WithAccount;
+use near_sdk::utils::WithAccount;
 use near_sdk::{serde::Deserialize, AccountId, Balance, Gas};
 use near_sdk_sim::{ExecutionResult, UserAccount, ViewResult};
 use std::marker::PhantomData;
@@ -432,7 +432,9 @@ where
     pub fn unwrap_json(&self) -> T {
         self.inner.unwrap_json()
     }
+}
 
+impl<T> Execution<T> {
     pub fn map<M>(self) -> Execution<M>
     where
         M: near_sdk::serde::de::DeserializeOwned,

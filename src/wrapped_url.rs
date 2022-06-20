@@ -1,18 +1,34 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
+    schemars::JsonSchema,
     serde::{Deserialize, Serialize},
 };
-use serde_with::{serde_as, DisplayFromStr};
+use serde_with::DisplayFromStr;
+
+// /// Wrapper that implements borsh de/serialization for [`url::Url`].
+// ///
+// /// For borsh, the structure is considered a `String`.
+// #[serde_as]
+// #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+// #[serde(crate = "near_sdk::serde")]
+// #[serde(transparent)]
+// // #[schemars(crate = "near_sdk::schemars")]
+// pub struct Url {
+//     #[serde_as(as = "DisplayFromStr")]
+//     inner: url::Url,
+// }
 
 /// Wrapper that implements borsh de/serialization for [`url::Url`].
 ///
 /// For borsh, the structure is considered a `String`.
-#[serde_as]
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 #[serde(transparent)]
+#[schemars(crate = "near_sdk::schemars")]
 pub struct Url {
-    #[serde_as(as = "DisplayFromStr")]
+    // #[serde(with = "serde_with::As::<DisplayFromStr>")]
+    #[serde(deserialize_with = "serde_with::As::<DisplayFromStr>::deserialize")]
+    #[serde(serialize_with = "serde_with::As::<DisplayFromStr>::serialize")]
     inner: url::Url,
 }
 
