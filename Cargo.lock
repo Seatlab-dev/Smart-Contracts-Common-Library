@@ -484,7 +484,7 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 [[package]]
 name = "contract-version"
 version = "0.0.1"
-source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=6b67b6b#6b67b6bcffcbf5a32fd6e5614fa202c0e6fe7685"
+source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=9dbee9a#9dbee9a993a805d9c4ad3dca984a6a4b5115bb13"
 dependencies = [
  "indexmap",
  "near-sdk",
@@ -1836,7 +1836,7 @@ dependencies = [
 [[package]]
 name = "near-sdk"
 version = "4.0.0-pre.8"
-source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=fed38a5#fed38a52bc3b33d0502c64173991dbb64d44b861"
+source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=8818c4f#8818c4f0474a92653c2e554cf4817f9b618c0fe6"
 dependencies = [
  "base64 0.13.0",
  "borsh 0.9.3",
@@ -1857,9 +1857,10 @@ dependencies = [
 [[package]]
 name = "near-sdk-macros"
 version = "4.0.0-pre.8"
-source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=fed38a5#fed38a52bc3b33d0502c64173991dbb64d44b861"
+source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=8818c4f#8818c4f0474a92653c2e554cf4817f9b618c0fe6"
 dependencies = [
  "Inflector",
+ "base64 0.13.0",
  "proc-macro2",
  "quote",
  "syn",
@@ -1907,7 +1908,7 @@ dependencies = [
 [[package]]
 name = "near-sys"
 version = "0.1.0"
-source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=fed38a5#fed38a52bc3b33d0502c64173991dbb64d44b861"
+source = "git+https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git?rev=8818c4f#8818c4f0474a92653c2e554cf4817f9b618c0fe6"
 
 [[package]]
 name = "near-units"
