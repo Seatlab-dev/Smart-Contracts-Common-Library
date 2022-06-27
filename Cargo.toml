@@ -16,7 +16,7 @@ indexmap = "1.8.2"
 
 [dependencies.contract-version]
 git = "https://github.com/Seatlab-dev/contract-version.git"
-rev = "c7befe9"
+rev = "d143a48"
 
 [dependencies.serde_with]
 version = "1.11.0"
@@ -29,7 +29,7 @@ features = ["preserve_order", "url"]
 
 [patch.crates-io.near-sdk]
 git = "https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git"
-rev = "a511581"
+rev = "83f1fb6"
 
 [patch.crates-io.schemars]
 git = "https://github.com/Seatlab-dev/schemars.git"
