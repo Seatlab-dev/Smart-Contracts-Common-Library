@@ -29,7 +29,7 @@ features = ["preserve_order", "url"]
 
 [patch.crates-io.near-sdk]
 git = "https://github.com/Seatlab-dev/Forked-Near-Rust-Sdk.git"
-rev = "8818c4f"
+rev = "0544cca"
 
 [patch.crates-io.schemars]
 git = "https://github.com/Seatlab-dev/schemars.git"
