@@ -2,6 +2,8 @@ pub mod collections;
 pub mod js_integer;
 pub mod owners;
 pub mod refund;
+pub mod royalty;
+pub mod usn;
 pub mod wrapped_url;
 pub mod wrapped_value;
 

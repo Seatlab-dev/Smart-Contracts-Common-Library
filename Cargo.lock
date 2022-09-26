@@ -484,7 +484,7 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 [[package]]
 name = "contract-version"
 version = "0.0.1"
-source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=c7befe9#c7befe90117dea55b8b9ba3aff334170882f3ff3"
+source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=d143a48#d143a48aa71ba19c56821995e38fa93174cc8580"
 dependencies = [
  "indexmap",
  "near-sdk",
