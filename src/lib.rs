@@ -7,6 +7,8 @@ pub mod usn;
 pub mod wrapped_url;
 pub mod wrapped_value;
 
+pub mod collectibles;
+
 #[cfg(feature = "sim")]
 pub mod sim;
 
