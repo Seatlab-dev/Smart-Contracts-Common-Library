@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use crate::consts::COUNT_SEPARATOR;
 use crate::royalty::RoyaltyPercentage;
 use crate::usn::UsnAmount;
@@ -14,6 +13,7 @@ use near_sdk::{
     serde::{Deserialize, Serialize},
     AccountId,
 };
+use std::collections::HashMap;
 
 // ====================================================================== //
 /// Information about a token group.

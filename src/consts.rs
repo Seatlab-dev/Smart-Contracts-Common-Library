@@ -1,6 +1,6 @@
+use crate::usn::UsnAmount;
 use lazy_static::lazy_static;
 use near_contract_standards::non_fungible_token::metadata::NFT_METADATA_SPEC;
-use crate::usn::UsnAmount;
 
 // Prices
 lazy_static! {
@@ -11,6 +11,7 @@ lazy_static! {
 }
 
 // Hashmap Keys
+pub const PRICE_KEY: &'static str = "price";
 pub const RESALE_PRICE_KEY: &'static str = "resale_price";
 pub const MAX_RESALE_PRICE_KEY: &'static str = "max_resale_price";
 pub const TRANSFERS_ENABLED_KEY: &'static str = "transfers_enabled";

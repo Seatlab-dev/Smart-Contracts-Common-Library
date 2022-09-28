@@ -1,6 +1,6 @@
 pub mod collections;
-pub mod js_integer;
 pub mod consts;
+pub mod js_integer;
 pub mod owners;
 pub mod refund;
 pub mod royalty;
