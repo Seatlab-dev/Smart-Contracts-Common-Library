@@ -46,6 +46,7 @@ pub struct TokenOffer {
 #[serde(crate = "near_sdk::serde")]
 #[serde(deny_unknown_fields)]
 #[schemars(crate = "near_sdk::schemars")]
+#[schemars(example = "token_metadata_example")]
 pub struct TokenMetadata {
     /// The name of this specific token.
     ///
@@ -94,6 +95,35 @@ pub struct TokenMetadata {
     pub reference_hash: Option<Base64VecU8>,
 }
 
+pub fn token_metadata_example() -> TokenMetadata {
+    TokenMetadata {
+        title: Some("Arch Nemesis: Mail Carrier".into()),
+        description: Some("My free-form description".into()),
+        media: Some("https://example.com/token/media.xyz".into()),
+        // from the hex:
+        // 00112233445566778899AABBCCDDEEFF0112233445566778899AABBCCDDEEFF0
+        media_hash: Some(
+            b"ABEiM0RVZneImaq7zN3u/wESIzRFVmd4iZqrvM3e7/A="
+                .to_vec()
+                .into(),
+        ),
+        copies: Some(JsUint::new(1)),
+        issued_at: Some("1640995200000".into()),
+        expires_at: Some("1640995200000".into()),
+        starts_at: Some("1640995200000".into()),
+        updated_at: Some("1640995200000".into()),
+        extra: Some(token_extra_example()),
+        reference: Some("https://example.com/token.json".into()),
+        // from the hex:
+        // 00112233445566778899AABBCCDDEEFF0112233445566778899AABBCCDDEEFF0
+        reference_hash: Some(
+            b"ABEiM0RVZneImaq7zN3u/wESIzRFVmd4iZqrvM3e7/A="
+                .to_vec()
+                .into(),
+        ),
+    }
+}
+
 /// Collectible minting info.
 #[cfg_attr(not(target_arch = "wasm32"), derive(Clone, Debug, PartialEq))]
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, JsonSchema)]
@@ -122,6 +152,7 @@ pub struct MintedCollectibleInfo {
 #[derive(Clone, Serialize, Deserialize, BorshSerialize, BorshDeserialize, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 #[schemars(crate = "near_sdk::schemars")]
+#[schemars(example = "token_extra_example")]
 pub struct TokenExtra {
     /// Token price (in USN).
     pub price: Option<U128>,
@@ -139,6 +170,42 @@ pub struct TokenExtra {
     /// Other arbitrary key-value mapping.
     #[serde(flatten)]
     pub others: HashMap<String, Value>,
+}
+
+pub fn token_extra_example() -> TokenExtra {
+    TokenExtra {
+        price: Some(1u128.into()),
+        audio_url: Some(
+            "https://audio.com/audio.mp3"
+                .parse::<url::Url>()
+                .unwrap()
+                .into(),
+        ),
+        video_url: Some(
+            "https://video.com/video.mp4"
+                .parse::<url::Url>()
+                .unwrap()
+                .into(),
+        ),
+        others: [
+            (
+                "key_a".to_string(),
+                Value::from(near_sdk::serde_json::json!(false)),
+            ),
+            (
+                "key_b".to_string(),
+                Value::from(near_sdk::serde_json::json!([0u8, 1u8])),
+            ),
+            (
+                "key_c".to_string(),
+                Value::from(near_sdk::serde_json::json!({
+                    "inner_a": "value"
+                })),
+            ),
+        ]
+        .into_iter()
+        .collect(),
+    }
 }
 
 // ====================================================================
@@ -485,4 +552,28 @@ pub struct UpdateCollectibleData {
 
     pub expires_at: Option<String>,
     pub starts_at: Option<String>,
+}
+
+#[cfg_attr(not(target_arch = "wasm32"), derive(Clone, Debug, PartialEq))]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+#[serde(deny_unknown_fields)]
+pub struct TicketForSale {
+    pub token_id: TokenId,
+    pub owner: AccountId,
+    pub token_group_id: TokenIdGroupName,
+    pub original_price: UsnAmount,      // unscaled pice in usn
+    pub usn_sell_price: UsnAmount,      // unscaled price in usn
+    pub usn_transfer_amount: U128,      // scaled price in usn
+    pub service_fee: RoyaltyPercentage, //expressed in percentage out of 10,000 = 100 %
+    pub listed_at: Option<String>,
+}
+
+#[cfg_attr(not(target_arch = "wasm32"), derive(Clone, Debug, PartialEq))]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+#[serde(deny_unknown_fields)]
+pub struct BuyTicketRequest {
+    pub token_id: TokenId,
+    pub price_usn: String, // price in usn (unscaled)
 }
