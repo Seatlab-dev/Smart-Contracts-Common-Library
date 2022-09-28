@@ -466,6 +466,7 @@ dependencies = [
  "base64 0.13.0",
  "contract-version",
  "indexmap",
+ "lazy_static",
  "near-contract-standards",
  "near-sdk",
  "near-sdk-sim",
