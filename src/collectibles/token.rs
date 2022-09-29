@@ -539,7 +539,7 @@ pub struct TransferredTokenPayout {
 #[serde(crate = "near_sdk::serde")]
 pub struct UpdateCollectibleData {
     pub token_id: Option<TokenId>,
-
+    pub token_group_id: Option<TokenIdGroupName>,
     pub title: Option<String>,
     pub description: Option<String>,
     pub media: Option<String>,
