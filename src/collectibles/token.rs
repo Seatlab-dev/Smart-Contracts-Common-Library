@@ -576,3 +576,5 @@ pub struct BuyTicketRequest {
     pub token_id: TokenId,
     pub price_usn: String, // price in usn (unscaled)
 }
+
+pub type NftBurnData = Vec<TokenId>;
