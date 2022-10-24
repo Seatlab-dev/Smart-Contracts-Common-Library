@@ -130,12 +130,6 @@ pub fn token_metadata_example() -> TokenMetadata {
 #[serde(deny_unknown_fields)]
 #[schemars(crate = "near_sdk::schemars")]
 pub struct MintedCollectibleInfo {
-    /// The index of the first minted token.
-    ///
-    /// For example, for a group that had 10 tokens already minted, if
-    /// 5 new tokens get minted, then this should be 11.
-    pub starting_index: JsUint,
-
     /// How many tokens for minted.
     ///
     /// For example, for a group that had 10 tokens already minted, if
