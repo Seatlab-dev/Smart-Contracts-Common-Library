@@ -466,11 +466,15 @@ dependencies = [
  "base64 0.13.0",
  "contract-version",
  "indexmap",
+ "lazy_static",
+ "near-contract-standards",
  "near-sdk",
  "near-sdk-sim",
  "near-units",
  "regex",
  "schemars",
+ "serde",
+ "serde_json",
  "serde_with",
  "url",
 ]
@@ -484,7 +488,7 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 [[package]]
 name = "contract-version"
 version = "0.0.1"
-source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=c7befe9#c7befe90117dea55b8b9ba3aff334170882f3ff3"
+source = "git+https://github.com/Seatlab-dev/contract-version.git?rev=d143a48#d143a48aa71ba19c56821995e38fa93174cc8580"
 dependencies = [
  "indexmap",
  "near-sdk",
@@ -1565,6 +1569,17 @@ checksum = "4cd61f43cedc1bb7a7c097ef3adbab0092a51185dca0e48d5851b37818e13978"
 dependencies = [
  "borsh 0.9.3",
  "serde",
+]
+
+[[package]]
+name = "near-contract-standards"
+version = "4.0.0-pre.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a47ea28f3a2a912625532fa307ab346cc0112c2c309e654ec81d1b9e7c2ca60e"
+dependencies = [
+ "near-sdk",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
